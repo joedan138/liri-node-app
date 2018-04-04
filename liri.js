@@ -40,8 +40,7 @@ function twitterCall() {
 };
 
 // spotify function
-function spotifyCall() {
-    var songTitle = process.argv[3];
+function spotifyCall(songTitle) {
     const Spotify = require('node-spotify-api');
 
     var spotify = new Spotify({
@@ -70,10 +69,9 @@ function spotifyCall() {
 }
 
 // OMDB Function
-function omdbCall() {
+function omdbCall(movieTitle) {
     const request = require('request');
-    var movieTitle = process.argv[3];
-
+    
     request('http://www.omdbapi.com/?apikey=8ed9a449&t=' + movieTitle, function (error, response, body) {
         body = JSON.parse(body);
         //   Movie Title
@@ -110,56 +108,49 @@ function doWhatItSays() {
     const fs = require('fs');
     var filename = "random.txt"
     var cmlInput = "";
-    // console.log(113);
 
     function fileReader() {
-        fs.readFile("./random.txt", 'utf8', function (err, data) {
-            // if (err) throw err;
-            cmlInput = data
-            console.log(120 + cmlInput);
-            console.log(121 + data);
+        fs.readFile(filename, 'utf8', function (err, txt) {
+            if (err) throw err;
+            var data = txt.split(",");
+            theHandler(data[0], data[1]);
         });
     }
     fileReader();
-    console.log(126);
-    console.log(127 + cmlInput);
-    theHandler(cmlInput);
+
 }
 
 
-// cml input
-var cmlInput = process.argv[2];
 
-function theHandler(dataInput) {
-    dataInput ? null : dataInput = cmlInput;
-    console.log(136 + dataInput);
+
+function theHandler(command, data) {
+
 
     // functions called by cml
-    if (dataInput === "my-tweets") {
+    if (command === "my-tweets") {
         twitterCall();
-        return
     }
-    else if (dataInput === "spotify-this-song") {
-        spotifyCall();
-        return
+    else if (command === "spotify-this-song" && data != null) {
+        spotifyCall(data);
     }
-    else if (dataInput === "movie-this") {
-        omdbCall();
-        return
+    else if (command === "movie-this" && data != null) {
+        omdbCall(data);
     }
-    else if (dataInput === "do-what-it-says") {
+    else if (command === "do-what-it-says") {
         doWhatItSays();
-        return
     }
-    else
+    else {
         console.log("");
-    console.log("Code not valid. Valid commands are: ");
-    // console.log("");
-    // console.log("my-tweets");
-    // console.log("spotify-this-song <song title>");
-    // console.log("movie-this <movie title>");
-    // console.log("do-what-it-says");
+        console.log("Code not valid. Valid commands are: ");
+        console.log("");
+        console.log("my-tweets");
+        console.log("spotify-this-song <song title>");
+        console.log("movie-this <movie title>");
+        console.log("do-what-it-says");
+    }
 }
 
-theHandler();
+theHandler(process.argv[2], process.argv[3]);
+
+
 
