@@ -133,16 +133,22 @@ function theHandler(command, data) {
     else if (command === "spotify-this-song" && data != null) {
         spotifyCall(data);
     }
+    else if (command === "spotify-this-song" && data == null) {
+        spotifyCall("Mambo no 5")
+    }
     else if (command === "movie-this" && data != null) {
         omdbCall(data);
+    }
+    else if (command === "movie-this" && data == null) {
+        omdbCall("Mr. Nobody")
     }
     else if (command === "do-what-it-says") {
         doWhatItSays();
     }
     else {
-        console.log("");
-        console.log("Code not valid. Valid commands are: ");
-        console.log("");
+        console.log("*********************************************************");
+        console.log("Command not valid. Valid commands are: ");
+        console.log("*********************************************************");
         console.log("my-tweets");
         console.log("spotify-this-song <song title>");
         console.log("movie-this <movie title>");
